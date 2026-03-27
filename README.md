@@ -80,6 +80,10 @@ Each subfolder contains a focused slice of the codebase with explanatory comment
 | [`command-system/`](command-system/) | Template-based NCID command dispatch (CNetCommand + CInterfaceImpl) |
 | [`zone-interface/`](zone-interface/) | ZoneServer client handler: command registration, dispatch, session state |
 | [`database/`](database/) | PostgreSQL wrapper with injection guard and timestamp utilities |
+| [`reverse-engineering/`](reverse-engineering/) | Ghidra workflow: from x86 ELF binary to modern C++17 |
+| [`packet-analysis/`](packet-analysis/) | Frida-based runtime packet capture and protocol validation |
+| [`game-systems/`](game-systems/) | Combat formulas and buff system reverse-engineered from decompiled code |
+| [`tools/`](tools/) | Python automation for remote build, deploy, and testing via SSH |
 
 ### Reverse Engineering Process
 
