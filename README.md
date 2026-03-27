@@ -17,7 +17,7 @@ The original server was compiled with GCC 4.4.5 targeting x86 Linux (Debian-era,
 - Login, character creation and selection
 - World exploration, map changes, teleportation
 - NPC interaction, shops, dialogue trees
-- Combat system (melee, ranged, magic) with damage formulas from decompiled code
+- Combat system (melee, ranged, magic) with damage fórmulas from decompiled code
 - Buff/enchant system with timed effects and stat recalculation
 - Guild, friend, and party systems
 - Player-to-player trade with multi-slot items
@@ -95,24 +95,24 @@ Each subfolder contains a focused slice of the codebase with explanatory comment
 
 ### Resumen
 
-Servidor MMORPG funcional reconstruido completamente mediante ingenieria inversa de binarios ELF x86 originales usando Ghidra. El proyecto consta de **6 servidores interconectados** que manejan el ciclo completo de juego, un framework compartido de red/eventos (`lapis::`), y un protocolo binario con **970 comandos de red** en 10 familias de protocolo.
+Servidor MMORPG funcional reconstruido completamente mediante ingeniería inversa de binarios ELF x86 originales usando Ghidra. El proyecto consta de **6 servidores interconectados** que manejan el ciclo completo de juego, un framework compartido de red/eventos (`lapis::`), y un protocolo binario con **970 comandos de red** en 10 familias de protocolo.
 
-El servidor original fue compilado con GCC 4.4.5 para Linux x86 (era Debian, eglibc-2.11.2). Cada layout de struct, vtable, formato de serializacion y maquina de estados fue recuperado del ensamblador descompilado y reconstruido en C++17 moderno y limpio.
+El servidor original fue compilado con GCC 4.4.5 para Linux x86 (era Debian, eglibc-2.11.2). Cada layout de struct, vtable, formato de serialización y máquina de estados fue recuperado del ensamblador descompilado y reconstruido en C++17 moderno y limpio.
 
 ### Estado Actual (Desarrollo Activo)
 
-- Login, creacion y seleccion de personajes
-- Exploracion del mundo, cambio de mapas, teletransporte
-- Interaccion con NPCs, tiendas, arboles de dialogo
-- Sistema de combate (melee, rango, magia) con formulas de dano del codigo descompilado
-- Sistema de buffs/encantamientos con efectos temporizados y recalculo de stats
+- Login, creación y selección de personajes
+- Exploración del mundo, cambio de mapas, teletransporte
+- Interacción con NPCs, tiendas, árboles de diálogo
+- Sistema de combate (melee, rango, magia) con fórmulas de daño del código descompilado
+- Sistema de buffs/encantamientos con efectos temporizados y recálculo de stats
 - Sistemas de gremio, amigos y grupo
 - Intercambio entre jugadores con items multi-slot
 - Sistema de misiones (aceptar, rastrear, completar, recompensas)
 - Muerte, respawn, EXP y leveleo
-- Spawn de monstruos, maquinas de estado de IA (idle, roam, hunt, combat, flee, return), drops
+- Spawn de monstruos, máquinas de estado de IA (idle, roam, hunt, combat, flee, return), drops
 - Chat (normal, gritar, mundo, equipo, gremio, susurro)
-- Sistema de banco/almacen
+- Sistema de banco/almacén
 - Sistema de duelos
 
 ### Arquitectura
@@ -128,36 +128,36 @@ LoginServer --- TicketServer --- GatewayServer
                               ZoneServer (gameplay)
 ```
 
-- **LoginServer**: Autenticacion de cuentas, lista de servidores
-- **TicketServer**: Generacion y validacion de tickets de sesion
-- **GatewayServer**: Enrutamiento de clientes, traspaso de conexion
-- **WorldServer**: Gestion de personajes, coordinacion entre zonas, gremio/grupo
-- **MissionServer**: Rastreo de estado de misiones, logica de completado
+- **LoginServer**: Autenticación de cuentas, lista de servidores
+- **TicketServer**: Generación y validación de tickets de sesión
+- **GatewayServer**: Enrutamiento de clientes, traspaso de conexión
+- **WorldServer**: Gestión de personajes, coordinación entre zonas, gremio/grupo
+- **MissionServer**: Rastreo de estado de misiones, lógica de completado
 - **ZoneServer**: Gameplay en tiempo real (movimiento, combate, hechizos, NPCs, monstruos, items)
 
-Todos los servidores comparten la libreria framework `lapis::`:
-- **Red**: I/O asincrono basado en epoll, intercambio de claves RSA-2048, cifrado de flujo RC4
+Todos los servidores comparten la librería framework `lapis::`:
+- **Red**: I/O asíncrono basado en epoll, intercambio de claves RSA-2048, cifrado de flujo RC4
 - **Eventos**: Cola de prioridad con eventos inmediatos y en tiempo real (temporizados)
-- **Serializacion**: Streams binarios con sobrecarga de operadores, verificacion de limites, rechazo de NaN
-- **Base de datos**: Wrapper PostgreSQL con deteccion de inyeccion SQL
-- **Protocolo**: 970 structs `CNetCommand<T>` con despacho automatico basado en NCID
+- **Serialización**: Streams binarios con sobrecarga de operadores, verificación de límites, rechazo de NaN
+- **Base de datos**: Wrapper PostgreSQL con detección de inyección SQL
+- **Protocolo**: 970 structs `CNetCommand<T>` con despacho automático basado en NCID
 
-### Tecnologias
+### Tecnologías
 
-| Categoria | Tecnologia |
+| Categoría | Tecnología |
 |---|---|
 | Lenguaje | C++17 |
 | Build System | CMake 3.16+ |
 | Base de Datos | PostgreSQL (libpq), 95 tablas en 3 bases de datos |
-| Encriptacion | OpenSSL (RSA-2048, RC4, MD5) |
+| Encriptación | OpenSSL (RSA-2048, RC4, MD5) |
 | Modelo I/O | Linux epoll, sockets POSIX no bloqueantes |
-| Serializacion | Protocolo binario custom (little-endian, prefijo de longitud) |
-| Herramienta RE | Ghidra (simbolos DWARF parcialmente disponibles) |
+| Serialización | Protocolo binario custom (little-endian, prefijo de longitud) |
+| Herramienta RE | Ghidra (símbolos DWARF parcialmente disponibles) |
 
-### Proceso de Ingenieria Inversa
+### Proceso de Ingeniería Inversa
 
-1. **Analisis binario**: Cargar ELF x86 en Ghidra, identificar vtables y jerarquias de clases
-2. **Recuperacion de protocolo**: Trazar funciones `Serialize`/`Deserialize` para recuperar formato wire de cada NCID
-3. **Reconstruccion de maquinas de estado**: Mapear sentencias `switch` y tablas de punteros a funciones a arquitectura event-driven
-4. **Validacion por captura de paquetes**: Hooks Frida en el cliente en vivo para capturar paquetes post-descifrado, comparar contra reconstruccion
-5. **Testing iterativo**: Debug paquete por paquete usando busqueda binaria (`debug_pkt_level`) para aislar crashes
+1. **Análisis binario**: Cargar ELF x86 en Ghidra, identificar vtables y jerarquías de clases
+2. **Recuperación de protocolo**: Trazar funciones `Serialize`/`Deserialize` para recuperar formato wire de cada NCID
+3. **Reconstrucción de máquinas de estado**: Mapear sentencias `switch` y tablas de punteros a funciones a arquitectura event-driven
+4. **Validación por captura de paquetes**: Hooks Frida en el cliente en vivo para capturar paquetes post-descifrado, comparar contra reconstrucción
+5. **Testing iterativo**: Debug paquete por paquete usando búsqueda binaria (`debug_pkt_level`) para aislar crashes
