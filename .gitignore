@@ -1,0 +1,27 @@
+# Build
+*.obj
+*.o
+*.exe
+*.dll
+*.lib
+*.a
+*.so
+*.pdb
+*.ilk
+*.exp
+
+# IDE
+.vs/
+.vscode/
+*.vcxproj.user
+*.suo
+
+# CMake
+build/
+CMakeCache.txt
+CMakeFiles/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
